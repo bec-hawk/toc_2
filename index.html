@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Theory of Change Builder - AI Safety & Policy</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Theory of Change Builder</h1>
+            <p class="subtitle">For AI Safety & Policy Research</p>
+        </header>
+
+        <div class="toolbar">
+            <button id="newProject" class="btn btn-primary">New Project</button>
+            <button id="exportBtn" class="btn btn-secondary">Export JSON</button>
+            <button id="importBtn" class="btn btn-secondary">Import JSON</button>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </div>
+
+        <div class="main-content">
+            <aside class="sidebar">
+                <h2>Project Info</h2>
+                <div class="project-info">
+                    <label for="projectName">Project Name:</label>
+                    <input type="text" id="projectName" placeholder="Enter project name...">
+
+                    <label for="projectDescription">Description:</label>
+                    <textarea id="projectDescription" rows="3" placeholder="Brief description of your AI safety/policy initiative..."></textarea>
+                </div>
+
+                <h3>Add Component</h3>
+                <div class="add-component">
+                    <select id="componentType">
+                        <option value="impact">🎯 Impact (Ultimate Goal)</option>
+                        <option value="outcome">📈 Outcome (Long-term Change)</option>
+                        <option value="output">📦 Output (Direct Result)</option>
+                        <option value="activity">⚡ Activity (Action)</option>
+                        <option value="input">🔧 Input (Resource)</option>
+                        <option value="assumption">💭 Assumption</option>
+                    </select>
+                    <button id="addComponent" class="btn btn-primary">Add Component</button>
+                </div>
+
+                <div class="legend">
+                    <h3>Legend</h3>
+                    <div class="legend-item"><span class="color-box impact-color"></span> Impact</div>
+                    <div class="legend-item"><span class="color-box outcome-color"></span> Outcome</div>
+                    <div class="legend-item"><span class="color-box output-color"></span> Output</div>
+                    <div class="legend-item"><span class="color-box activity-color"></span> Activity</div>
+                    <div class="legend-item"><span class="color-box input-color"></span> Input</div>
+                    <div class="legend-item"><span class="color-box assumption-color"></span> Assumption</div>
+                </div>
+            </aside>
+
+            <main class="canvas-container">
+                <div class="view-toggle">
+                    <button id="viewFlow" class="btn btn-toggle active">Flow View</button>
+                    <button id="viewList" class="btn btn-toggle">List View</button>
+                </div>
+
+                <div id="flowView" class="flow-view">
+                    <div class="flow-column" data-type="impact">
+                        <h3>🎯 Impact</h3>
+                        <div class="drop-zone" data-type="impact"></div>
+                    </div>
+                    <div class="flow-column" data-type="outcome">
+                        <h3>📈 Outcomes</h3>
+                        <div class="drop-zone" data-type="outcome"></div>
+                    </div>
+                    <div class="flow-column" data-type="output">
+                        <h3>📦 Outputs</h3>
+                        <div class="drop-zone" data-type="output"></div>
+                    </div>
+                    <div class="flow-column" data-type="activity">
+                        <h3>⚡ Activities</h3>
+                        <div class="drop-zone" data-type="activity"></div>
+                    </div>
+                    <div class="flow-column" data-type="input">
+                        <h3>🔧 Inputs</h3>
+                        <div class="drop-zone" data-type="input"></div>
+                    </div>
+                </div>
+
+                <div id="listView" class="list-view" style="display: none;">
+                    <div id="listContent"></div>
+                </div>
+
+                <div id="assumptionsPanel" class="assumptions-panel">
+                    <h3>💭 Assumptions & Risks</h3>
+                    <div id="assumptionsList"></div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal for editing components -->
+    <div id="editModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Edit Component</h2>
+            <form id="editForm">
+                <label for="editTitle">Title:</label>
+                <input type="text" id="editTitle" required>
+
+                <label for="editDescription">Description:</label>
+                <textarea id="editDescription" rows="4"></textarea>
+
+                <label for="editIndicators">Success Indicators:</label>
+                <textarea id="editIndicators" rows="3" placeholder="How will you measure success?"></textarea>
+
+                <label for="editTimeframe">Timeframe:</label>
+                <input type="text" id="editTimeframe" placeholder="e.g., 6 months, 2 years">
+
+                <div class="modal-buttons">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="button" id="deleteComponent" class="btn btn-danger">Delete</button>
+                    <button type="button" class="btn btn-secondary close-modal">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
