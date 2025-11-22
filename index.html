@@ -44,6 +44,25 @@
                     <button id="addComponent" class="btn btn-primary">Add Component</button>
                 </div>
 
+                <div class="bayesian-panel">
+                    <h3>📊 Bayesian Analysis</h3>
+                    <div class="overall-probability">
+                        <div class="stat-item">
+                            <span class="stat-label">Overall Success Probability:</span>
+                            <span id="overallProbability" class="stat-value">—</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Average Confidence:</span>
+                            <span id="avgConfidence" class="stat-value">—</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">Weakest Link:</span>
+                            <span id="weakestLink" class="stat-value">—</span>
+                        </div>
+                    </div>
+                    <p class="help-text" style="font-size: 0.75rem; margin-top: 0.5rem;">Overall probability calculated by multiplying probabilities through the causal chain.</p>
+                </div>
+
                 <div class="legend">
                     <h3>Legend</h3>
                     <div class="legend-item"><span class="color-box impact-color"></span> Impact</div>
@@ -113,6 +132,27 @@
 
                 <label for="editTimeframe">Timeframe:</label>
                 <input type="text" id="editTimeframe" placeholder="e.g., 6 months, 2 years">
+
+                <div class="bayesian-section">
+                    <h3>📊 Bayesian Estimates</h3>
+
+                    <label for="editProbability">Success Probability (%):</label>
+                    <div class="slider-container">
+                        <input type="range" id="editProbability" min="0" max="100" value="50" class="probability-slider">
+                        <span id="probabilityValue" class="slider-value">50%</span>
+                    </div>
+                    <p class="help-text">How likely is this component to succeed or contribute to the next step?</p>
+
+                    <label for="editConfidence">Confidence in Estimate (%):</label>
+                    <div class="slider-container">
+                        <input type="range" id="editConfidence" min="0" max="100" value="50" class="confidence-slider">
+                        <span id="confidenceValue" class="slider-value">50%</span>
+                    </div>
+                    <p class="help-text">How confident are you in your probability estimate?</p>
+
+                    <label for="editEvidence">Evidence & Updates:</label>
+                    <textarea id="editEvidence" rows="3" placeholder="Track evidence that updates your probability estimates..."></textarea>
+                </div>
 
                 <div class="modal-buttons">
                     <button type="submit" class="btn btn-primary">Save</button>

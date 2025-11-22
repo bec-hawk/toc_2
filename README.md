@@ -26,6 +26,20 @@ A Theory of Change (ToC) is a comprehensive framework that maps out how your wor
 - Set timeframes to plan your work
 - Add descriptions and context
 
+### Bayesian Reasoning (NEW!)
+- **Probability Estimates**: Assign success probabilities (0-100%) to each component
+- **Confidence Levels**: Track how confident you are in your probability estimates
+- **Overall Success Calculation**: Automatically calculates the compound probability of achieving your impact through the entire causal chain
+- **Weakest Link Identification**: Identifies the component with the lowest probability - your biggest bottleneck
+- **Evidence Tracking**: Document evidence that updates your probability estimates over time
+- **Visual Indicators**: Color-coded probability bars on each component (green=high, yellow=medium, red=low)
+
+This Bayesian approach helps you:
+- Reason explicitly about uncertainty
+- Identify where to focus efforts (weakest links)
+- Update beliefs as you gather evidence
+- Communicate realistic expectations about impact
+
 ### Assumptions Tracking
 - Dedicated panel for tracking assumptions and risks
 - Critical for identifying potential weak points in your theory
@@ -74,12 +88,19 @@ open index.html
    - Add assumptions about what needs to be true
    - Consider risks and external factors
 
-5. **Iterate**
+5. **Add Bayesian Estimates**
+   - For each component, set success probability (0-100%)
+   - Indicate your confidence in that estimate
+   - Track evidence that updates your probabilities
+   - Watch the sidebar for overall success probability
+
+6. **Iterate**
    - Edit components by clicking on them
    - Drag components to reorganize
-   - Add success indicators and timeframes
+   - Update probabilities as you gather evidence
+   - Focus on improving the "weakest link"
 
-6. **Export & Share**
+7. **Export & Share**
    - Click "Export JSON" to save your work
    - Share with team members or stakeholders
 
@@ -139,6 +160,22 @@ open index.html
 - Update based on new information
 - Adjust to changing circumstances
 - Learn from what's working (and what isn't)
+
+### Use Bayesian Estimates Wisely
+- **Start with honest priors**: What's your initial best guess? Don't overestimate or underestimate
+- **Low confidence is okay**: If you're uncertain, set confidence low - this signals where you need more research
+- **Update with evidence**: As you gather data, update probabilities - this is Bayesian updating in action
+- **Focus on the weakest link**: The component with lowest probability is your bottleneck - improving it has the biggest impact
+- **Understand compound probability**: If you have 5 steps each at 80% probability, overall success is only 33% (0.8^5)
+- **Track your evidence**: Document what made you update probabilities - this builds institutional memory
+
+Example:
+- Activity: "Publish research paper" → 70% probability, 60% confidence
+- Output: "Policy recommendations adopted" → 40% probability, 30% confidence ← **Weakest link!**
+- Outcome: "Improved AI governance" → 50% probability, 40% confidence
+- Overall success: 70% × 40% × 50% = **14%**
+
+This shows why even high-quality work might have low overall impact probability - and where to focus efforts.
 
 ## Technical Details
 

@@ -87,6 +87,15 @@ class TheoryOfChangeApp {
                 this.closeModal();
             }
         });
+
+        // Bayesian sliders
+        document.getElementById('editProbability').addEventListener('input', (e) => {
+            document.getElementById('probabilityValue').textContent = e.target.value + '%';
+        });
+
+        document.getElementById('editConfidence').addEventListener('input', (e) => {
+            document.getElementById('confidenceValue').textContent = e.target.value + '%';
+        });
     }
 
     addComponent() {
@@ -97,7 +106,10 @@ class TheoryOfChangeApp {
             title: '',
             description: '',
             indicators: '',
-            timeframe: ''
+            timeframe: '',
+            probability: 50,
+            confidence: 50,
+            evidence: ''
         };
 
         this.components.push(component);
@@ -118,6 +130,15 @@ class TheoryOfChangeApp {
         document.getElementById('editIndicators').value = component.indicators || '';
         document.getElementById('editTimeframe').value = component.timeframe || '';
 
+        // Bayesian fields
+        const probability = component.probability !== undefined ? component.probability : 50;
+        const confidence = component.confidence !== undefined ? component.confidence : 50;
+        document.getElementById('editProbability').value = probability;
+        document.getElementById('editConfidence').value = confidence;
+        document.getElementById('probabilityValue').textContent = probability + '%';
+        document.getElementById('confidenceValue').textContent = confidence + '%';
+        document.getElementById('editEvidence').value = component.evidence || '';
+
         document.getElementById('editModal').classList.add('active');
     }
 
@@ -134,6 +155,11 @@ class TheoryOfChangeApp {
         component.description = document.getElementById('editDescription').value;
         component.indicators = document.getElementById('editIndicators').value;
         component.timeframe = document.getElementById('editTimeframe').value;
+
+        // Bayesian fields
+        component.probability = parseInt(document.getElementById('editProbability').value);
+        component.confidence = parseInt(document.getElementById('editConfidence').value);
+        component.evidence = document.getElementById('editEvidence').value;
 
         this.saveToStorage();
         this.render();
@@ -165,6 +191,7 @@ class TheoryOfChangeApp {
     render() {
         this.renderFlowView();
         this.renderAssumptions();
+        this.updateBayesianStats();
 
         // Update project info
         document.getElementById('projectName').value = this.projectName;
@@ -292,11 +319,44 @@ class TheoryOfChangeApp {
             card.appendChild(indicators);
         }
 
+        // Bayesian probability indicator
+        if (component.type !== 'assumption' && component.probability !== undefined) {
+            const probIndicator = document.createElement('div');
+            probIndicator.className = 'probability-indicator';
+
+            const probText = document.createElement('span');
+            probText.className = 'probability-text';
+            probText.textContent = `P: ${component.probability}%`;
+            probIndicator.appendChild(probText);
+
+            const confBadge = document.createElement('span');
+            confBadge.className = 'confidence-badge';
+            confBadge.textContent = `Conf: ${component.confidence}%`;
+            probIndicator.appendChild(confBadge);
+
+            card.appendChild(probIndicator);
+
+            // Probability bar
+            const probBar = document.createElement('div');
+            probBar.className = 'probability-bar';
+            const probFill = document.createElement('div');
+            probFill.className = `probability-fill ${this.getProbabilityClass(component.probability)}`;
+            probFill.style.width = component.probability + '%';
+            probBar.appendChild(probFill);
+            card.appendChild(probBar);
+        }
+
         card.addEventListener('click', () => {
             this.openEditModal(component.id);
         });
 
         return card;
+    }
+
+    getProbabilityClass(probability) {
+        if (probability >= 70) return 'high';
+        if (probability >= 40) return 'medium';
+        return 'low';
     }
 
     setupDragAndDrop() {
@@ -416,6 +476,55 @@ class TheoryOfChangeApp {
                 console.error('Error loading data:', error);
             }
         }
+    }
+
+    updateBayesianStats() {
+        const mainComponents = this.components.filter(c => c.type !== 'assumption');
+
+        if (mainComponents.length === 0) {
+            document.getElementById('overallProbability').textContent = '—';
+            document.getElementById('avgConfidence').textContent = '—';
+            document.getElementById('weakestLink').textContent = '—';
+            return;
+        }
+
+        // Calculate overall success probability
+        // This is the product of all probabilities in the causal chain
+        let overallProb = 1;
+        mainComponents.forEach(comp => {
+            const prob = (comp.probability !== undefined ? comp.probability : 50) / 100;
+            overallProb *= prob;
+        });
+        overallProb *= 100;
+
+        // Calculate average confidence
+        const avgConf = mainComponents.reduce((sum, comp) => {
+            return sum + (comp.confidence !== undefined ? comp.confidence : 50);
+        }, 0) / mainComponents.length;
+
+        // Find weakest link (lowest probability)
+        let weakest = mainComponents[0];
+        mainComponents.forEach(comp => {
+            const compProb = comp.probability !== undefined ? comp.probability : 50;
+            const weakestProb = weakest.probability !== undefined ? weakest.probability : 50;
+            if (compProb < weakestProb) {
+                weakest = comp;
+            }
+        });
+
+        // Update UI
+        const overallEl = document.getElementById('overallProbability');
+        overallEl.textContent = overallProb.toFixed(1) + '%';
+        overallEl.className = 'stat-value ' + this.getProbabilityClass(overallProb);
+
+        const avgConfEl = document.getElementById('avgConfidence');
+        avgConfEl.textContent = avgConf.toFixed(1) + '%';
+        avgConfEl.className = 'stat-value ' + this.getProbabilityClass(avgConf);
+
+        const weakestEl = document.getElementById('weakestLink');
+        weakestEl.textContent = weakest.title || 'Untitled';
+        const weakestProb = weakest.probability !== undefined ? weakest.probability : 50;
+        weakestEl.className = 'stat-value ' + this.getProbabilityClass(weakestProb);
     }
 }
 
